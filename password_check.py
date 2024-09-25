@@ -13,8 +13,9 @@ def user_input():
         if (valid_password_check(user_password) == True):
             # Gather counts and score by getting returned values from passwd_character_count function
             # Run the following functions
-            character_count, uppercase_count, number_count, special_char_count = passwd_character_count(user_password)
-            scoring_system(character_count, uppercase_count, number_count, special_char_count)
+            character_count, lowercase_count, uppercase_count, number_count, special_char_count = passwd_character_count(user_password)
+            scoring_system(character_count, lowercase_count, uppercase_count, number_count, special_char_count)
+            calculate_cracking_duration(character_count)
             break
         else:
             valid = False
@@ -52,6 +53,10 @@ def passwd_character_count(user_password):
     character_count = len(user_password)
     print (f"characters: {character_count}")
 
+    # count of lowercase letters
+    lowercase_count = sum(1 for char in user_password if char.islower())
+    print (f"lowercase count: {lowercase_count}")
+
     # count of uppercase letters
     uppercase_count = sum(1 for char in user_password if char.isupper())
     print (f"uppercase count: {uppercase_count}")
@@ -64,10 +69,10 @@ def passwd_character_count(user_password):
     special_char_count = sum(1 for char in user_password if not char.isalnum())
     print (f"special character count: {special_char_count} \n")
 
-    return character_count, uppercase_count, number_count, special_char_count
+    return character_count, lowercase_count, uppercase_count, number_count, special_char_count
 
 # Scoring System
-def scoring_system(character_count, uppercase_count, number_count, special_char_count):
+def scoring_system(character_count, lowercase_count, uppercase_count, number_count, special_char_count):
     score = 0
     # Length score
     if (character_count >= 12 and character_count <= 14):
@@ -102,6 +107,29 @@ def scoring_system(character_count, uppercase_count, number_count, special_char_
         print("Strong password. Well done!")
     else:
         print("Very strong password!")
+
+
+def calculate_cracking_duration(character_count):
+    # Defining all possible characters in password
+    lowercase_letters = 26
+    uppercase_letters = 26
+    digits = 10
+    special_characters = 32
+
+    potential_character_count = (lowercase_letters + uppercase_letters + digits + special_characters)
+    # Calculate password complexity by adding all possible values of each category based on each char of the the password string
+    password_space = (potential_character_count ** character_count) # all possible characters squared the length of the password
+
+    print (f"password space = {password_space}")
+
+    # Calculate duration assuming cracking speed is 100,000,000 guesses per second 
+    crack_calc = (password_space / 100000000)
+    seconds_in_year = (60 * 60 * 24 * 365)
+
+    duration = (crack_calc / seconds_in_year)
+
+    print (f"Assuming a computer that guesses 100,000,000 passwords per second, this password would take {duration} years to crack ")
+
 
 # Run the first function to kickstart everything else
 user_input()
