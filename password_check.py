@@ -1,7 +1,25 @@
 #!/opt/homebrew/bin/python3
 
 import sys
+import string
+import random
+# Choice statements
+def main():
+    print("Choose an option: ")
+    print("1: Check password strength")
+    print("2: Generate a random password")
 
+    choice = input("\n")
+
+    if (choice == "1"):
+        # Case 1 - Password Strength Check
+        user_input()
+    elif (choice == "2"):
+        # Case 2 - Generate Random Password
+        random_password()
+        print("work in progress")
+
+### Pasword Strength Checker ###
 # Take user input
 def user_input():
     valid = False
@@ -131,7 +149,17 @@ def calculate_cracking_duration(character_count):
     print (f"Assuming a computer that guesses 100,000,000 passwords per second, this password would take {duration} years to crack ")
 
 
+### Case 2 - Random Password Generator ###
+def random_password():
+    char_amount = int(input("Select the amount of characters desired in password: "))
+    
+    # Define ascii character sets
+    lowercase_range = range(97, 123)  # ASCII 'a' to 'z'
+    uppercase_range = range(65, 91)   # ASCII 'A' to 'Z'
+    digit_range = range(48, 58)       # ASCII '0' to '9'
+
 # Run the first function to kickstart everything else
-user_input()
+main()
+#user_input()
 
 sys.exit(0)
