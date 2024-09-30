@@ -1,8 +1,7 @@
 #!/opt/homebrew/bin/python3
 
 import sys
-import string
-import random
+
 # Choice statements
 def main():
     print("Choose an option: ")
