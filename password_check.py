@@ -1,22 +1,34 @@
 #!/opt/homebrew/bin/python3
 
 import sys
+import random
+from password_manager import *
 
 # Choice statements
 def main():
     print("Choose an option: ")
     print("1: Check password strength")
     print("2: Generate a random password")
+    print("3: Enter password manager")
+    print("99: Exit")
 
     choice = input("\n")
 
     if (choice == "1"):
         # Case 1 - Password Strength Check
         user_input()
+
     elif (choice == "2"):
         # Case 2 - Generate Random Password
         random_password()
-        print("work in progress")
+        # print("work in progress")
+
+    elif (choice == "3"):
+        user_options()
+
+    elif (choice == "99"):
+        print("Exiting! \n")
+        sys.exit(0)
 
 ### Pasword Strength Checker ###
 # Take user input
@@ -47,15 +59,19 @@ def valid_password_check(user_password):
     for char in user_password:
         if (char.isupper()):
             has_upper = True
+
         elif (char.isdigit()):
             has_digit = True
+
         elif not (char.isalnum()):
             has_special_character = True
+
         elif (len(user_password) >= 12):
             has_above12_char = True
             
     if (has_upper and has_digit and has_special_character and has_above12_char):
         valid = True
+
     else:
         valid = False
         print ("")
@@ -94,12 +110,16 @@ def scoring_system(character_count, lowercase_count, uppercase_count, number_cou
     # Length score
     if (character_count >= 12 and character_count <= 14):
         score += 1
+
     elif (character_count >= 15 and character_count <= 17):
         score += 2
+
     elif (character_count >= 18 and character_count <= 20):
         score += 3
+
     elif (character_count >= 21 and character_count <= 24):
         score += 4
+
     else:
         score += 5
 
@@ -116,12 +136,16 @@ def scoring_system(character_count, lowercase_count, uppercase_count, number_cou
 
     if score <= 5:
         print("Weak password. Consider adding more characters, numbers, and special characters.")
+
     elif score <= 8:
         print("Okay password. Could be better.")
+
     elif score <= 10:
         print("Good password. Nice mix of characters.")
+
     elif score <= 12:
         print("Strong password. Well done!")
+        
     else:
         print("Very strong password!")
 
@@ -140,25 +164,56 @@ def calculate_cracking_duration(character_count):
     print (f"password space = {password_space}")
 
     # Calculate duration assuming cracking speed is 100,000,000 guesses per second 
-    crack_calc = (password_space / 100000000)
+    crack_calc = (password_space / 1000000000)
     seconds_in_year = (60 * 60 * 24 * 365)
 
     duration = (crack_calc / seconds_in_year)
 
-    print (f"Assuming a computer that guesses 100,000,000 passwords per second, this password would take {duration} years to crack ")
+    print (f"Assuming a computer that guesses 1,000,000,000 passwords per second, this password would take {duration} years to crack \n")
 
 
 ### Case 2 - Random Password Generator ###
 def random_password():
-    char_amount = int(input("Select the amount of characters desired in password: "))
+    char_amount = int(input("Select the amount of characters desired in password: \n"))
     
     # Define ascii character sets
     lowercase_range = range(97, 123)  # ASCII 'a' to 'z'
     uppercase_range = range(65, 91)   # ASCII 'A' to 'Z'
     digit_range = range(48, 58)       # ASCII '0' to '9'
 
-# Run the first function to kickstart everything else
-main()
-#user_input()
+    special_characters = ["`", "~", "!", "@", "#", "$", 
+                          "%", "^", "&", "*", "(", ")", 
+                          "-", "_", "=", "+", "{", "[", 
+                          "}", "]", "\\", "|", ";", ":", 
+                          "'", ",", "<", ".", ">", "/", 
+                          "?"]
 
-sys.exit(0)
+    password = []   # prepare an empty list for the random password
+
+    # Loop over amount of characters chosen by user
+    for _ in range(char_amount):
+        char_type = random.randint(1,4)
+
+        if char_type == 1:
+            password.append(chr(random.choice(lowercase_range)))
+
+        elif char_type == 2:
+            password.append(chr(random.choice(uppercase_range)))
+        
+        elif char_type == 3:
+            password.append(chr(random.choice(digit_range)))
+
+        elif char_type == 4:
+            password.append(random.choice(special_characters))
+    
+    random.shuffle(password)
+
+    # Join characters togeher
+    password = ''.join(password[:char_amount])
+    print("") # For readability
+    print(f"Random Password: {password} \n")
+
+# Run the first function to kickstart everything else
+while True:
+    main()
+    #user_input()
